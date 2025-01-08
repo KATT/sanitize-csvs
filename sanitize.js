@@ -43,15 +43,14 @@ async function processFile(inputPath, outputPath) {
         
         // Skip lines with wrong number of columns
         if (fields.length !== expectedColumns) {
-            console.error(`Error in ${filename} line ${lineNumber}: Wrong number of columns (expected ${expectedColumns}, got ${fields.length})`);
-            console.error(`-> Line content: ${line}`);
+            console.warn(`Error on line #${lineNumber}: Wrong number of columns (expected ${expectedColumns}, got ${fields.length})`);
+            console.warn(`-> Line content: ${line}`);
             continue;
         }
 
         // Quote each field and replace the separator
         lastLine = fields.map(field => {
-            // Escape quotes with backslash and wrap in quotes
-            return `"${field.trim().replace(/"/g, '\\"')}"`;
+            return `"${field.replace(/"/g, '').trim()}"`;
         }).join('|');
     }
 
@@ -68,8 +67,8 @@ async function main() {
         // Create output directory if it doesn't exist
         await fs.mkdir('output', { recursive: true });
 
-        // Read all files from the data directory
-        const files = await fs.readdir('data');
+        // Read all files from the input directory
+        const files = await fs.readdir('input');
         
         // Filter for CSV files
         const csvFiles = files.filter(file => file.toLowerCase().endsWith('.csv'));
@@ -78,7 +77,7 @@ async function main() {
 
         // Process each file
         for (const file of csvFiles) {
-            const inputPath = path.join('data', file);
+            const inputPath = path.join('input', file);
             const outputPath = path.join('output', file);
 
             console.log(`Processing ${file}...`);
@@ -87,7 +86,7 @@ async function main() {
         }
 
         console.log('All files processed successfully!');
-    } catch (error) {add
+    } catch (error) {
         console.error('Error processing files:', error);
     }
 }

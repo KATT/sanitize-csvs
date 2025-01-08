@@ -4,7 +4,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "node sanitize.js && node import.js"
   },
   "author": "",
   "license": "ISC",
